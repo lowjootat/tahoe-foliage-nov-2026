@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 2 · Places on the Way Home · Nov 14–15, 2026</title>
+<style>
+  :root{
+    --bg:#faf7f2; --ink:#26221d; --muted:#6b6259;
+    --line:#e7ded1; --card:#fffdfa;
+    --rust:#b5651d; --gold:#e2a53a; --green:#4a6b3a; --deep:#7c3f10;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .backbar{background:#2b2b2b; color:#fff}
+  .backbar a{color:#fff; text-decoration:none; font-size:14px; font-weight:600}
+  .backbar .wrap{padding:10px 20px; display:flex; justify-content:space-between; gap:12px}
+
+  header.hero{
+    position:relative; color:#fff; padding:56px 0 48px;
+    background:
+      linear-gradient(180deg, rgba(20,14,8,.5), rgba(20,14,8,.82)),
+      url("images/applehill_persimmon_vineyard.jpg") center 50%/cover no-repeat;
+  }
+  header.hero h1{margin:0 0 8px; font-size:clamp(26px,4vw,44px); line-height:1.1; letter-spacing:-.5px}
+  header.hero .sub{font-size:clamp(15px,2vw,19px); opacity:.94; max-width:760px}
+  header.hero .meta{margin-top:18px; display:flex; flex-wrap:wrap; gap:8px}
+  .pill{background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.28);
+        padding:5px 12px; border-radius:999px; font-size:13px; backdrop-filter:blur(4px)}
+
+  section{padding:40px 0}
+  h2{font-size:22px; margin:0 0 4px; letter-spacing:-.3px}
+  .lede{color:var(--muted); margin:0 0 22px; max-width:820px}
+  .corr-h{display:flex; align-items:center; gap:12px; margin:0 0 4px}
+  .corr-h .tag{background:var(--rust); color:#fff; font-size:12px; font-weight:800; letter-spacing:.06em;
+               text-transform:uppercase; padding:4px 10px; border-radius:999px}
+  .corr-h h2{margin:0}
+
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:18px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px; overflow:hidden;
+        display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .15s ease}
+  .card:hover{transform:translateY(-3px); box-shadow:0 12px 28px rgba(80,60,30,.12)}
+  .card .bd{padding:14px 16px 16px; display:flex; flex-direction:column; flex:1}
+  .card h3{margin:0 0 2px; font-size:16px}
+  .card .loc{color:var(--muted); font-size:13px; margin-bottom:10px}
+  .card .note{margin:10px 0 0; font-size:13.5px; color:var(--muted)}
+  .card .elev{font-weight:700; color:var(--ink)}
+  .verdict-chip{display:inline-block; font-size:11px; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+                padding:3px 8px; border-radius:999px; margin-bottom:8px}
+  .vc-go{background:#e4f0dc; color:#2f5a1e; border:1px solid #b9d7a6}
+  .vc-ok{background:#fdf0d8; color:#8a5a12; border:1px solid #eccb8c}
+  .vc-no{background:#f2eae4; color:#8a6a58; border:1px solid #dcc9ba}
+  .card .maprow{margin-top:auto; padding-top:14px; display:flex; flex-wrap:wrap; gap:8px}
+  .maplink{display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700;
+           color:var(--rust); text-decoration:none; border:1px solid var(--line);
+           border-radius:9px; padding:7px 11px; background:#fff}
+  .maplink:hover{background:#fff3e2; border-color:#e7c79a}
+  .maplink svg{width:14px; height:14px; flex:none}
+
+  /* PEAK BAR */
+  .pbar{margin-top:9px}
+  .pbar .ptrack{position:relative;height:10px;border-radius:6px;background:#f0ebe3}
+  .pbar .pfill{position:absolute;top:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,#e3e1db,#6b4a36);box-shadow:0 1px 2px rgba(0,0,0,.12);z-index:1}
+  .pbar .pcap{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-top:3px}
+  .pbar .ptrack{cursor:crosshair}
+  .peakLine{position:absolute; top:-3px; bottom:-3px; width:3px; margin-left:-1.5px; background:#ff2020;
+            border-radius:2px; pointer-events:none; z-index:4;
+            box-shadow:0 0 5px 1px rgba(255,40,40,.9),0 0 11px 3px rgba(255,40,40,.5)}
+  .band{position:absolute; top:-4px; bottom:-4px; border-radius:4px; background:transparent;
+        border:2px solid #8a4a12; z-index:3; pointer-events:none; min-width:6px;
+        box-shadow:0 0 0 1px rgba(255,255,255,.7)}
+  .dateTip{position:fixed; z-index:9999; transform:translate(-50%,-100%); background:#26221d; color:#fff;
+           font:600 12px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+           padding:5px 9px; border-radius:6px; white-space:nowrap; pointer-events:none; opacity:0; transition:opacity .08s}
+  .dateTip.show{opacity:1}
+  .dateTip.below{transform:translate(-50%,0)}
+
+  details.src{margin-top:10px;font-size:12.5px;color:var(--muted)}
+  details.src summary{cursor:pointer;color:var(--rust);font-weight:600}
+  details.src ul{margin:8px 0 0;padding-left:16px}
+  details.src li{margin:4px 0}
+  details.src a{color:var(--rust)}
+
+  /* CAROUSEL */
+  .carousel{position:relative;height:180px;background:#ddd;overflow:hidden}
+  .carousel .slide{position:absolute;inset:0;background:center/cover no-repeat;opacity:0;transition:opacity .35s}
+  .carousel .slide.active{opacity:1}
+  .cbtn{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;border:0;border-radius:50%;
+        background:rgba(20,14,8,.45);color:#fff;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .cbtn:hover{background:rgba(20,14,8,.72)}
+  .cbtn.prev{left:8px}.cbtn.next{right:8px}
+  .cdots{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px}
+  .cdot{width:7px;height:7px;border-radius:50%;border:0;padding:0;background:rgba(255,255,255,.55);cursor:pointer}
+  .cdot.active{background:#fff}
+  .ccredit{position:absolute;top:8px;right:8px;background:rgba(20,14,8,.55);color:#fff;font-size:10px;
+           padding:3px 7px;border-radius:6px;max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  .callout{background:#fff6e6; border:1px solid #f0d9ac; border-left:5px solid var(--gold);
+           border-radius:12px; padding:16px 18px; color:#5c4a1e; font-size:14.5px}
+  .callout b{color:#3f3210}
+
+  footer{border-top:1px solid var(--line); padding:26px 0 46px; color:var(--muted); font-size:13px}
+  footer a, a{color:var(--rust)}
+</style>
+</head>
+<body>
+
+<div class="backbar"><div class="wrap"><a href="index.html">← Trip overview</a><a href="day1-tahoe.html">Day 1 · Lake Tahoe →</a></div></div>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Day 2 · Places on the way home</h1>
+    <p class="sub">Sunday <b>Nov 15, 2026</b>, driving from Tahoe back to the Bay Area. Every candidate below has fall photos and a peak bar. The outlined box on each bar is your weekend — the closer a place's red peak line sits to that box, the better it'll look.</p>
+    <div class="meta">
+      <span class="pill">🍁 11 candidate stops</span>
+      <span class="pill">🚗 3 return corridors</span>
+      <span class="pill">📷 Fall photos on every card</span>
+      <span class="pill">⏱️ Peak bar = how close to peak</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" style="padding-bottom:0">
+  <div class="callout">
+    <b>How to read the bar.</b> Each bar is that stop's whole color season — <b>green</b> early, <b>red at its estimated peak</b>, <b>brown</b> after. The dark-outlined box is <b>Nov 14–15</b>. If the box sits <b>right</b> of the red line you're late; <b>left</b> of it you're early. Hover any bar for the date.
+  </div>
+</section>
+
+<!-- ===================== CORRIDOR A ===================== -->
+<section class="wrap" id="corridor-a">
+  <div class="corr-h"><span class="tag">Corridor A</span><h2>US-50 · El Dorado &amp; Apple Hill</h2></div>
+  <p class="lede">South Lake Tahoe → Placerville → Camino → Sacramento → Bay Area. The default drive home and the best-stocked one — this is where most of your color will come from.</p>
+  <div class="grid" data-start="2026-10-18" data-end="2026-11-27">
+
+    <!-- Apple Hill -->
+    <div class="card">
+      <div class="carousel">
+        <div class="slide active" style="background-image:url('images/applehill_larsen.jpg')"></div>
+        <div class="slide" style="background-image:url('images/applehill_persimmon_vineyard.jpg')"></div>
+        <div class="slide" style="background-image:url('images/applehill_vineyard2.jpg')"></div>
+        <div class="slide" style="background-image:url('images/applehill_persimmon.jpg')"></div>
+        <div class="slide" style="background-image:url('images/applehill_vineyard.jpg')"></div>
+        <div class="ccredit">Photos: Philip Reedy / California Fall Color</div>
+        <button class="cbtn prev" aria-label="previous photo">&#8249;</button><button class="cbtn next" aria-label="next photo">&#8250;</button>
+        <div class="cdots"><button class="cdot active" data-i="0" aria-label="photo 1"></button><button class="cdot" data-i="1" aria-label="photo 2"></button><button class="cdot" data-i="2" aria-label="photo 3"></button><button class="cdot" data-i="3" aria-label="photo 4"></button><button class="cdot" data-i="4" aria-label="photo 5"></button></div>
+      </div>
+      <div class="bd">
+        <span class="verdict-chip vc-go">Best bet</span>
+        <h3>Apple Hill · Camino</h3>
+        <div class="loc">Off US-50, El Dorado County · <span class="elev">3,133 ft</span></div>
+        <div class="pbar"><div class="ptrack"><span class="pfill" data-from="2026-11-10" data-to="2026-11-18"></span></div><div class="pcap"><span>Oct 18</span><span>Nov 27</span></div></div>
+        <p class="note">The single best reason to take US-50. Orchards, farms and vineyards throw red, orange and gold; the growers call early-to-mid November the "best-kept secret." <b>Larsen Road</b> is the classic fall drive.</p>
+        <details class="src"><summary>Peak dates &amp; sources</summary><ul>
+          <li>Apple Hill Growers: fall colors are best <b>"the first two weeks of November."</b> <a href="https://applehill.com/november-best-time-to-visit/" target="_blank" rel="noopener">Apple Hill</a>.</li>
+          <li>Ground report: Larsen Road and the orchards/vineyards <b>"lovely" on Nov 6, 2025</b>; and <b>full peak (75–100%) on Nov 18, 2023</b>. <a href="https://californiafallcolor.com/2025/11/07/apple-hill-is-lovely-ice-house-road-is-past-peak/" target="_blank" rel="noopener">California Fall Color</a>.</li>
+          <li>El Dorado Wines: the Camino / Apple Hill area shines <b>late October through November</b>. <a href="https://eldoradowines.org/your-guide-to-fall-colors-in-el-dorado-wine-country/" target="_blank" rel="noopener">El Dorado Wines</a>.</li>
+        </ul></details>
+        <div class="maprow">
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Apple%20Hill%20Camino%20CA"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Open in Maps</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- El Dorado wine country -->
+    <div class="card">
+      <div class="carousel">
+        <div class="slide active" style="background-image:url('images/vineyard_zinfandel.jpg')"></div>
+        <div class="slide" style="background-image:url('images/applehill_vineyard.jpg')"></div>
+        <div class="slide" style="background-image:url('images/vineyard_autumn.jpg')"></div>
+        <div class="slide" style="background-image:url('images/vineyard_oldvine.jpg')"></div>
+        <div class="ccredit">Photos: Wikimedia Commons (representative CA vineyards)</div>
+        <button class="cbtn prev" aria-label="previous photo">&#8249;</button><button class="cbtn next" aria-label="next photo">&#8250;</button>
+        <div class="cdots"><button class="cdot active" data-i="0" aria-label="photo 1"></button><button class="cdot" data-i="1" aria-label="photo 2"></button><button class="cdot" data-i="2" aria-label="photo 3"></button><button class="cdot" data-i="3" aria-label="photo 4"></button></div>
+      </div>
+      <div class="bd">
+        <span class="verdict-chip vc-go">Best bet</span>
+        <h3>El Dorado wine country</h3>
+        <div class="loc">Fair Play · Camino · Pleasant Valley · <span class="elev">~2,000–2,800 ft</span></div>
+        <div class="pbar"><div class="ptrack"><span class="pfill" data-from="2026-11-05" data-to="2026-11-12"></span></div><div class="pcap"><span>Oct 18</span><span>Nov 27</span></div></div>
+        <p class="note">The vines are the late show. After harvest the leaves explode into crimson, rust and gold and hold into mid-November — pair a stop with a tasting and a picnic.</p>
+        <details class="src"><summary>Peak dates &amp; sources</summary><ul>
+          <li>El Dorado Wines: "the grapevines themselves are autumn's unsung heroes… the leaves explode into vibrant hues of crimson, rust, and gold" — the foothill AVA shines <b>late October through November</b>. <a href="https://eldoradowines.org/your-guide-to-fall-colors-in-el-dorado-wine-country/" target="_blank" rel="noopener">El Dorado Wines</a>.</li>
+          <li>Vineyard imagery here is representative California wine-country fall (Wikimedia Commons); the ground reports for the El Dorado AVA are the timing source.</li>
+        </ul></details>
+        <div class="maprow">
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Fair%20Play%20El%20Dorado%20County%20CA"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Open in Maps</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- South Fork American River -->
+    <div class="card">
+      <div class="carousel">
+        <div class="slide active" style="background-image:url('images/americanriver_oak1.jpg')"></div>
+        <div class="slide" style="background-image:url('images/americanriver_oak3.jpg')"></div>
+        <div class="slide" style="background-image:url('images/americanriver_oak2.jpg')"></div>
+        <div class="slide" style="background-image:url('images/americanriver_oak4.jpg')"></div>
+        <div class="ccredit">Photos: Michelle Pontoni / California Fall Color</div>
+        <button class="cbtn prev" aria-label="previous photo">&#8249;</button><button class="cbtn next" aria-label="next photo">&#8250;</button>
+        <div class="cdots"><button class="cdot active" data-i="0" aria-label="photo 1"></button><button class="cdot" data-i="1" aria-label="photo 2"></button><button class="cdot" data-i="2" aria-label="photo 3"></button><button class="cdot" data-i="3" aria-label="photo 4"></button></div>
+      </div>
+      <div class="bd">
+        <span class="verdict-chip vc-ok">Probably past peak</span>
+        <h3>South Fork American River</h3>
+        <div class="loc">Hwy 50 canyon, Kyburz–Pollock Pines · El Dorado NF · <span class="elev">~1,500–3,500 ft</span></div>
+        <div class="pbar"><div class="ptrack"><span class="pfill" data-from="2026-10-28" data-to="2026-11-01"></span></div><div class="pcap"><span>Oct 18</span><span>Nov 27</span></div></div>
+        <p class="note">The classic Hwy 50 canyon color — black oaks bronze along the river grade. It peaked around Halloween; by Nov 15 the canyon is likely stripped, but it's a gorgeous drive either way.</p>
+        <details class="src"><summary>Peak dates &amp; sources</summary><ul>
+          <li>Ground report: South Fork American River oaks <b>"at peak" on Oct 30, 2025</b>, with "miles and miles of color along Highway 50." <a href="https://californiafallcolor.com/2025/11/04/50-miles-of-color-along-hwy-50-go-now/" target="_blank" rel="noopener">California Fall Color</a>.</li>
+          <li>MTJP model: the El Dorado NF 2,000–4,000 ft band peaks <b>Nov 5</b>, and the forest is "leaves down" by Nov 9–15. <a href="https://morethanjustparks.com/foliage-tracker/california/eldorado-national-forest" target="_blank" rel="noopener">More Than Just Parks</a>.</li>
+        </ul></details>
+        <div class="maprow">
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=South%20Fork%20American%20River%20Kyburz%20CA"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Open in Maps</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Placerville -->
+    <div class="card">
+      <div class="carousel">
+        <div class="slide active" style="background-image:url('images/placerville_pistache.jpg')"></div>
+        <div class="slide" style="background-image:url('images/placerville_hwy50_1.jpg')"></div>
+        <div class="slide" style="background-image:url('images/placerville_hwy50_2.jpg')"></div>
+        <div class="ccredit">Photos: Michelle Pontoni / California Fall Color</div>
+        <button class="cbtn prev" aria-label="previous photo">&#8249;</button><button class="cbtn next" aria-label="next photo">&#8250;</button>
+        <div class="cdots"><button class="cdot active" data-i="0" aria-label="photo 1"></button><button class="cdot" data-i="1" aria-label="photo 2"></button><button class="cdot" data-i="2" aria-label="photo 3"></button></div>
+      </div>
+      <div class="bd">
+        <span class="verdict-chip vc-ok">Probably past peak</span>
+        <h3>Placerville</h3>
+        <div class="loc">Historic Main Street, Hwy 50 · <span class="elev">1,860 ft</span></div>
+        <div class="pbar"><div class="ptrack"><span class="pfill" data-from="2026-10-28" data-to="2026-11-01"></span></div><div class="pcap"><span>Oct 18</span><span>Nov 27</span></div></div>
+        <p class="note">Placerville's <b>Chinese pistache</b> trees turn fiery red and peak around Halloween — likely past by your dates. Still worth a coffee-and-stroll on the old main street.</p>
+        <details class="src"><summary>Peak dates &amp; sources</summary><ul>
+          <li>Ground report: Placerville Chinese pistache <b>"at peak" Oct 30, 2025</b>; "GO NOW" Nov 4, 2025. <a href="https://californiafallcolor.com/2025/11/04/50-miles-of-color-along-hwy-50-go-now/" target="_blank" rel="noopener">California Fall Color</a>.</li>
+          <li>Visit El Dorado: black oak turns gold across the foothills (1,000–5,000 ft) and Hwy 50 through Placerville is lined with "fiery-red pistachio trees." <a href="https://visit-eldorado.com/where-to-find-fall-colors-around-el-dorado-county/" target="_blank" rel="noopener">Visit El Dorado</a>.</li>
+        </ul></details>
+        <div class="maprow">
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Main%20Street%20Placerville%20CA"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Open in Maps</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coloma -->
+    <div class="card">
+      <div class="carousel">
+        <div class="slide active" style="background-image:url('images/coloma.jpg')"></div>
+        <div class="slide" style="background-image:url('images/marshall_gold.jpg')"></div>
+        <div class="ccredit">Photos: Wikimedia Commons</div>
+        <button class="cbtn prev" aria-label="previous photo">&#8249;</button><button class="cbtn next" aria-label="next photo">&#8250;</button>
+        <div class="cdots"><button class="cdot active" data-i="0" aria-label="photo 1"></button><button class="cdot" data-i="1" aria-label="photo 2"></button></div>
+      </div>
+      <div class="bd">
+        <span class="verdict-chip vc-ok">Just past peak</span>
+        <h3>Coloma · Marshall Gold Discovery</h3>
+        <div class="loc">South Fork American River, Hwy 49 · <span class="elev">~760 ft</span></div>
+        <div class="pbar"><div class="ptrack"><span class="pfill" data-from="2026-11-02" data-to="2026-11-09"></span></div><div class="pcap"><span>Oct 18</span><span>Nov 27</span></div></div>
+        <p class="note">Lower and later than the canyon, so it holds a week or two behind. Historic state park with a river walk and color along Hwy 49 toward Auburn.</p>
+        <details class="src"><summary>Peak dates &amp; sources</summary><ul>
+          <li>Visit El Dorado names Marshall Gold Discovery State Historic Park for "spectacular views along the American River as well as the many stands of colorful trees along Hwy 49." <a href="https://visit-eldorado.com/where-to-find-fall-colors-around-el-dorado-county/" target="_blank" rel="noopener">Visit El Dorado</a>.</li>
+          <li>Peak date inferred: a low river valley (~760 ft) runs ~1 week behind the 2,000–4,000 ft forest band (Nov 5).</li>
+        </ul></details>
+        <div class="maprow">
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Marshall%20Gold%20Discovery%20State%20Historic%20Park"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Open in Maps</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Folsom Lake -->
+    <div class="card">
+      <div class="carousel">
+        <div class="slide active" style="background-image:url('images/folsom_lake.jpg')"></div>
+        <div class="ccredit">Photo: Wikimedia Commons</div>
+        <div class="cdots"><button class="cdot active" data-i="0" aria-label="photo 1"></button></div>
+      </div>
+      <div class="bd">
+        <span class="verdict-chip vc-go">On time</span>
+        <h3>Folsom Lake · American River Parkway</h3>
+        <div class="loc">Sacramento County · <span class="elev">~300–500 ft</span></div>
+        <div class="pbar"><div class="ptrack"><span class="pfill" data-from="2026-11-12" data-to="2026-11-18"></span></div><div class="pcap"><span>Oct 18</span><span>Nov 27</span></div></div>
+        <p class="note">The lowest and latest stop on the US-50 run. <b>Valley oak, Fremont cottonwood and sycamore</b> along the American River come in last — right on your dates.</p>
+        <details class="src"><summary>Peak dates &amp; sources</summary><ul>
+          <li>MTJP's model carries a separate <b>late "valley oak" date</b> for low-elevation places, well past the canopy peak; low ground turns last. <a href="https://morethanjustparks.com/foliage-tracker/california" target="_blank" rel="noopener">More Than Just Parks</a>.</li>
+          <li>Peak date inferred from elevation: ~400 ft runs roughly 2 weeks behind the 2,000–4,000 ft foothill band.</li>
+        </ul></details>
+        <div class="maprow">
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=American%20River%20Parkway%20Sacramento"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Open in Maps</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== CORRIDOR B ===================== -->
+<section class="wrap" id="corridor-b">
+  <div class="corr-h"><span class="tag">Corridor B</span><h2>CA-88 / CA-49 · Amador wine country</h2></div>
+  <p class="lede">South Lake Tahoe → Kirkwood → Jackson → Plymouth → Stockton → Bay Area. The wine detour — Shenandoah Valley's old-vine vineyards and the Gold Rush towns.</p>
+  <div class="grid" data-start="2026-10-18" data-end="2026-11-27">
+
+    <!-- Amador Shenandoah -->
+    <div class="card">
+      <div class="carousel">
+        <div class="slide active" style="background-image:url('images/vineyard_zinfandel.jpg')"></div>
+        <div class="slide" style="background-image:url('images/vineyard_oldvine.jpg')"></div>
+        <div class="slide" style="background-image:url('images/vineyard_autumn.jpg')"></div>
+        <div class="slide" style="background-image:url('images/sutter_creek.jpg')"></div>
+        <div class="ccredit">Photos: Wikimedia Commons (representative CA vineyards)</div>
+        <button class="cbtn prev" aria-label="previous photo">&#8249;</button><button class="cbtn next" aria-label="next photo">&#8250;</button>
+        <div class="cdots"><button class="cdot active" data-i="0" aria-label="photo 1"></button><button class="cdot" data-i="1" aria-label="photo 2"></button><button class="cdot" data-i="2" aria-label="photo 3"></button><button class="cdot" data-i="3" aria-label="photo 4"></button></div>
+      </div>
+      <div class="bd">
+        <span class="verdict-chip vc-go">Best bet</span>
+        <h3>Amador · Shenandoah Valley</h3>
+        <div class="loc">Around Plymouth, Amador County · <span class="elev">~1,500–2,000 ft</span></div>
+        <div class="pbar"><div class="ptrack"><span class="pfill" data-from="2026-11-07" data-to="2026-11-14"></span></div><div class="pcap"><span>Oct 18</span><span>Nov 27</span></div></div>
+        <p class="note">50+ mostly family wineries on rolling vineyard roads — the vines glow crimson and rust into mid-November, and post-rain green grass sets them off. Old-vine Zinfandel country.</p>
+        <details class="src"><summary>Peak dates &amp; sources</summary><ul>
+          <li>Amador Vintners: fall is the liveliest season for Shenandoah Valley wine tours. <a href="https://amadorwine.com/" target="_blank" rel="noopener">Amador Vintners</a>.</li>
+          <li>Vineyard timing: vines hold rust/crimson/gold into mid-November across the Sierra foothills. <a href="https://eldoradowines.org/your-guide-to-fall-colors-in-el-dorado-wine-country/" target="_blank" rel="noopener">El Dorado Wines</a>; <a href="https://californiafallcolor.com/category/gold-country/" target="_blank" rel="noopener">California Fall Color</a>.</li>
+          <li>Vineyard imagery is representative California wine-country fall (Wikimedia Commons).</li>
+        </ul></details>
+        <div class="maprow">
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Shenandoah%20Valley%20Plymouth%20CA%20wine"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Open in Maps</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sutter Creek / Jackson -->
+    <div class="card">
+      <div class="carousel">
+        <div class="slide active" style="background-image:url('images/sutter_creek.jpg')"></div>
+        <div class="slide" style="background-image:url('images/jackson.jpg')"></div>
+        <div class="ccredit">Photos: Wikimedia Commons</div>
+        <button class="cbtn prev" aria-label="previous photo">&#8249;</button><button class="cbtn next" aria-label="next photo">&#8250;</button>
+        <div class="cdots"><button class="cdot active" data-i="0" aria-label="photo 1"></button><button class="cdot" data-i="1" aria-label="photo 2"></button></div>
+      </div>
+      <div class="bd">
+        <span class="verdict-chip vc-ok">Just past peak</span>
+        <h3>Sutter Creek · Jackson</h3>
+        <div class="loc">Hwy 49, Amador County · <span class="elev">~1,300–2,000 ft</span></div>
+        <div class="pbar"><div class="ptrack"><span class="pfill" data-from="2026-11-05" data-to="2026-11-12"></span></div><div class="pcap"><span>Oct 18</span><span>Nov 27</span></div></div>
+        <p class="note">Gold Rush main streets lined with planted shade trees — the closest thing the foothills have to a New England townscape. Good lunch stop.</p>
+        <details class="src"><summary>Peak dates &amp; sources</summary><ul>
+          <li>Gold Country towns run mid-October through mid-November on planted trees (maples, liquidambar, pistache). <a href="https://californiafallcolor.com/category/gold-country/" target="_blank" rel="noopener">California Fall Color</a>.</li>
+          <li>Peak date inferred from elevation, ~1 week after the 2,500 ft town band (Nov 8).</li>
+        </ul></details>
+        <div class="maprow">
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Sutter%20Creek%20CA"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Open in Maps</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== CORRIDOR C ===================== -->
+<section class="wrap" id="corridor-c">
+  <div class="corr-h"><span class="tag">Corridor C</span><h2>I-80 · Nevada City &amp; Placer</h2></div>
+  <p class="lede">Truckee → Nevada City → Grass Valley → Auburn → Sacramento → Bay Area. The north-shore route — best if you stayed on the north side of the lake.</p>
+  <div class="grid" data-start="2026-10-18" data-end="2026-11-27">
+
+    <!-- Nevada City / Grass Valley -->
+    <div class="card">
+      <div class="carousel">
+        <div class="slide active" style="background-image:url('images/nevadacity_1.jpg')"></div>
+        <div class="slide" style="background-image:url('images/nevadacity_2.jpg')"></div>
+        <div class="slide" style="background-image:url('images/nevadacity_3.jpg')"></div>
+        <div class="slide" style="background-image:url('images/nevadacity_4.jpg')"></div>
+        <div class="ccredit">Photos: Sylvia Wright / California Fall Color</div>
+        <button class="cbtn prev" aria-label="previous photo">&#8249;</button><button class="cbtn next" aria-label="next photo">&#8250;</button>
+        <div class="cdots"><button class="cdot active" data-i="0" aria-label="photo 1"></button><button class="cdot" data-i="1" aria-label="photo 2"></button><button class="cdot" data-i="2" aria-label="photo 3"></button><button class="cdot" data-i="3" aria-label="photo 4"></button></div>
+      </div>
+      <div class="bd">
+        <span class="verdict-chip vc-ok">Probably past peak</span>
+        <h3>Nevada City · Grass Valley</h3>
+        <div class="loc">Hwy 49, Nevada County · <span class="elev">~2,500 ft</span></div>
+        <div class="pbar"><div class="ptrack"><span class="pfill" data-from="2026-11-06" data-to="2026-11-11"></span></div><div class="pcap"><span>Oct 18</span><span>Nov 27</span></div></div>
+        <p class="note">Victorian streets and planted maples make this the most concentrated "town" color in the Gold Country. A spotter called peak here on <b>Nov 8, 2024</b> — so by Nov 15 it's likely fading.</p>
+        <details class="src"><summary>Peak dates &amp; sources</summary><ul>
+          <li>Ground report: "GO NOW! to Nevada City" — <b>peak (75–100%) on Nov 8, 2024</b>. <a href="https://californiafallcolor.com/2024/11/08/go-now-to-nevada-city/" target="_blank" rel="noopener">California Fall Color</a>.</li>
+          <li>Peak window Nov 6–11 tracks that report; treat Nov 14–15 as late.</li>
+        </ul></details>
+        <div class="maprow">
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Nevada%20City%20CA"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Open in Maps</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Placer wine trail -->
+    <div class="card">
+      <div class="carousel">
+        <div class="slide active" style="background-image:url('images/vineyard_autumn.jpg')"></div>
+        <div class="slide" style="background-image:url('images/auburn_oldtown.jpg')"></div>
+        <div class="ccredit">Photos: Wikimedia Commons</div>
+        <button class="cbtn prev" aria-label="previous photo">&#8249;</button><button class="cbtn next" aria-label="next photo">&#8250;</button>
+        <div class="cdots"><button class="cdot active" data-i="0" aria-label="photo 1"></button><button class="cdot" data-i="1" aria-label="photo 2"></button></div>
+      </div>
+      <div class="bd">
+        <span class="verdict-chip vc-ok">Just past peak</span>
+        <h3>Placer County wine trail</h3>
+        <div class="loc">Auburn · Newcastle · Loomis, off I-80 · <span class="elev">~1,000–1,400 ft</span></div>
+        <div class="pbar"><div class="ptrack"><span class="pfill" data-from="2026-11-05" data-to="2026-11-12"></span></div><div class="pcap"><span>Oct 18</span><span>Nov 27</span></div></div>
+        <p class="note">20 boutique wineries parallel to I-80 through oak-dotted foothills — a low-detour tasting stop. Color is patchier here, more of a hunt than a canopy.</p>
+        <details class="src"><summary>Peak dates &amp; sources</summary><ul>
+          <li>Placer County peaks with the rest of the foothills in the <b>Oct 21–27</b> county week, so lower, later vines push it into early November. <a href="https://morethanjustparks.com/foliage-tracker/california" target="_blank" rel="noopener">More Than Just Parks</a>; <a href="https://www.visitplacer.com/" target="_blank" rel="noopener">Visit Placer</a>.</li>
+          <li>Vineyard imagery is representative California wine-country fall (Wikimedia Commons).</li>
+        </ul></details>
+        <div class="maprow">
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Placer%20County%20wine%20trail%20Auburn%20CA"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Open in Maps</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== FINISH ===================== -->
+<section class="wrap" id="finish">
+  <div class="corr-h"><span class="tag">Finish</span><h2>Near the Bay · Filoli</h2></div>
+  <p class="lede">The last stop before home, if you want one more hit of color after Sacramento.</p>
+  <div class="grid" data-start="2026-10-18" data-end="2026-11-27">
+    <div class="card">
+      <div class="carousel">
+        <div class="slide active" style="background-image:url('images/filoli.jpg')"></div>
+        <div class="ccredit">Photo: Wikimedia Commons</div>
+        <div class="cdots"><button class="cdot active" data-i="0" aria-label="photo 1"></button></div>
+      </div>
+      <div class="bd">
+        <span class="verdict-chip vc-go">On time</span>
+        <h3>Filoli · Woodside</h3>
+        <div class="loc">Woodside, San Mateo County · <span class="elev">~500 ft</span></div>
+        <div class="pbar"><div class="ptrack"><span class="pfill" data-from="2026-11-10" data-to="2026-11-20"></span></div><div class="pcap"><span>Oct 18</span><span>Nov 27</span></div></div>
+        <p class="note">The formal gardens keep color into late November — <b>ginkgos</b> go brilliant yellow and are often the last to turn, with Japanese maples and liquidambar behind them.</p>
+        <details class="src"><summary>Peak dates &amp; sources</summary><ul>
+          <li>California Fall Color has logged Filoli turning from late October onward, with ginkgos persisting latest. <a href="https://californiafallcolor.com/2026/10/27/fall-starts-to-find-filoli/" target="_blank" rel="noopener">California Fall Color</a>.</li>
+          <li>Bay-area bigleaf maple peaks ~Nov 9 in the MTJP model, so the low coastal strip is still in play on your dates. <a href="https://morethanjustparks.com/foliage-tracker/california/golden-gate-national-recreation-area" target="_blank" rel="noopener">More Than Just Parks</a>.</li>
+        </ul></details>
+        <div class="maprow">
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Filoli%20Woodside%20CA"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Open in Maps</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p><b>Sources.</b> Peak-date model &amp; elevation bands from <a href="https://morethanjustparks.com/foliage-tracker/california" target="_blank" rel="noopener">More Than Just Parks' California foliage tracker</a> (forecast issued Nov 1, 2026). Ground reports from <a href="https://californiafallcolor.com/" target="_blank" rel="noopener">California Fall Color</a> (2023–2025 seasons). Grower/visitor guidance from <a href="https://applehill.com/november-best-time-to-visit/" target="_blank" rel="noopener">Apple Hill Growers</a>, <a href="https://visit-eldorado.com/where-to-find-fall-colors-around-el-dorado-county/" target="_blank" rel="noopener">Visit El Dorado</a>, <a href="https://eldoradowines.org/your-guide-to-fall-colors-in-el-dorado-wine-country/" target="_blank" rel="noopener">El Dorado Wines</a> and <a href="https://amadorwine.com/" target="_blank" rel="noopener">Amador Vintners</a>.</p>
+  <p><b>Photo credits.</b> Apple Hill, Placerville, South Fork American River and Nevada City photos by California Fall Color spotters (Philip Reedy, Michelle Pontoni, Sylvia Wright). Place photos and representative vineyard images from Wikimedia Commons. Peak dates are estimates for planning — always confirm the live report before departing.</p>
+  <p>Generated Nov 1, 2026 · <a href="index.html">← Trip overview</a> · <a href="day1-tahoe.html">Day 1 · Lake Tahoe →</a></p>
+</footer>
+
+</main>
+<script>
+document.querySelectorAll('.carousel').forEach(function(c){
+  var s=c.querySelectorAll('.slide'), d=c.querySelectorAll('.cdot'), i=0;
+  function show(n){i=(n+s.length)%s.length;
+    s.forEach(function(e,k){e.classList.toggle('active',k===i)});
+    d.forEach(function(e,k){e.classList.toggle('active',k===i)});}
+  var p=c.querySelector('.prev'), x=c.querySelector('.next');
+  if(p)p.onclick=function(){show(i-1)}; if(x)x.onclick=function(){show(i+1)};
+  d.forEach(function(e,k){e.onclick=function(){show(k)}});
+  if(s.length<2){if(p)p.style.display='none';if(x)x.style.display='none';var dd=c.querySelector('.cdots');if(dd)dd.style.display='none';}
+});
+</script>
+<script>
+(function(){
+  var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  function ms(s){var p=s.split("-").map(Number);return Date.UTC(p[0],p[1]-1,p[2]);}
+  var DAY=86400000;
+  var RAMP=[[-24,"#e3e1db"],[-21,"#a4bf85"],[-18,"#c7c596"],[-15,"#d1bf80"],[-12,"#cdb151"],[-9,"#cf9c21"],[-6,"#e08018"],[-3,"#e25d1a"],[0,"#d42a1e"],[3,"#b82828"],[6,"#963027"],[9,"#823a2a"],[12,"#77452f"],[15,"#734732"],[18,"#6e4934"],[21,"#6b4a36"],[24,"#6b4a36"]];
+  function season(peak,s,span){
+    var stops=RAMP.map(function(st){
+      var f=Math.max(0,Math.min(1,(peak+st[0]*DAY-s)/span));
+      return st[1]+" "+(f*100).toFixed(2)+"%";
+    });
+    return "linear-gradient(90deg,"+stops.join(",")+")";
+  }
+  var tip=document.createElement("div"); tip.className="dateTip"; document.body.appendChild(tip);
+  var BAND_START=ms("2026-11-14"), BAND_END=ms("2026-11-16");
+  document.querySelectorAll("[data-start][data-end]").forEach(function(scope){
+    var s=ms(scope.dataset.start), e=ms(scope.dataset.end), span=e-s;
+    scope.querySelectorAll(".pfill").forEach(function(bar){
+      if(!bar.dataset.from||!bar.dataset.to){return;}
+      var peak=(ms(bar.dataset.from)+ms(bar.dataset.to))/2;
+      bar.style.left="0%"; bar.style.width="100%";
+      bar.style.background=season(peak,s,span);
+      var pl=document.createElement("div"); pl.className="peakLine";
+      pl.style.left=(Math.max(0,Math.min(1,(peak-s)/span))*100)+"%";
+      bar.parentElement.appendChild(pl);
+    });
+    scope.querySelectorAll(".ptrack").forEach(function(track){
+      var bd=document.createElement("div"); bd.className="band";
+      bd.style.left=(Math.max(0,Math.min(1,(BAND_START-s)/span))*100)+"%";
+      bd.style.width=(Math.max(0,Math.min(1,(BAND_END-BAND_START)/span))*100)+"%";
+      track.appendChild(bd);
+      var line=document.createElement("div"); line.className="dateLine"; track.appendChild(line);
+      track.addEventListener("mousemove",function(ev){
+        var r=track.getBoundingClientRect();
+        var f=Math.max(0,Math.min(1,(ev.clientX-r.left)/r.width));
+        var d=new Date(s+f*(e-s));
+        tip.textContent=M[d.getUTCMonth()]+" "+d.getUTCDate()+", "+d.getUTCFullYear();
+        tip.style.left=ev.clientX+"px";
+        var above=r.top-10;
+        if(above<46){tip.style.top=(r.bottom+10)+"px";tip.classList.add("below");}
+        else{tip.style.top=above+"px";tip.classList.remove("below");}
+        tip.classList.add("show");
+        line.style.left=(f*100)+"%"; line.classList.add("show");
+      });
+      track.addEventListener("mouseleave",function(){tip.classList.remove("show");line.classList.remove("show");});
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fall Color After Tahoe · Nov 14–15, 2026</title>
+<style>
+  :root{
+    --bg:#faf7f2; --ink:#26221d; --muted:#6b6259;
+    --line:#e7ded1; --card:#fffdfa;
+    --rust:#b5651d; --gold:#e2a53a; --green:#4a6b3a; --deep:#7c3f10;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* HERO */
+  header.hero{
+    position:relative; color:#fff; padding:64px 0 56px;
+    background:
+      linear-gradient(180deg, rgba(20,14,8,.5), rgba(20,14,8,.82)),
+      url("images/applehill_larsen.jpg") center 55%/cover no-repeat;
+  }
+  header.hero h1{margin:0 0 8px; font-size:clamp(28px,4.4vw,48px); line-height:1.08; letter-spacing:-.6px}
+  header.hero .sub{font-size:clamp(15px,2vw,19px); opacity:.94; max-width:780px}
+  header.hero .meta{margin-top:18px; display:flex; flex-wrap:wrap; gap:8px}
+  .pill{background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.28);
+        padding:5px 12px; border-radius:999px; font-size:13px; backdrop-filter:blur(4px)}
+
+  section{padding:44px 0}
+  h2{font-size:22px; margin:0 0 4px; letter-spacing:-.3px}
+  .lede{color:var(--muted); margin:0 0 22px; max-width:820px}
+
+  /* VERDICT */
+  .verdict{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:6px}
+  .vbox{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px 22px}
+  .vbox h3{margin:0 0 8px; font-size:16px; display:flex; align-items:center; gap:8px}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+  .dot.no{background:#c98a1b}.dot.yes{background:var(--green)}
+  .vbox p{margin:0; color:var(--muted); font-size:14.5px}
+  .vbox p + p{margin-top:8px}
+  @media(max-width:720px){.verdict{grid-template-columns:1fr}}
+
+  /* ROUTE CARDS */
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px; overflow:hidden;
+        display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .15s ease}
+  .card:hover{transform:translateY(-3px); box-shadow:0 12px 28px rgba(80,60,30,.12)}
+  .card .ph{height:180px; background:#ddd center/cover no-repeat}
+  .card .bd{padding:16px 18px 18px; display:flex; flex-direction:column; flex:1}
+  .card h3{margin:0 0 2px; font-size:17px}
+  .card .loc{color:var(--muted); font-size:13px; margin-bottom:10px}
+  .card .note{margin:10px 0 0; font-size:13.5px; color:var(--muted)}
+  .card .facts{margin:10px 0 0; font-size:13px; color:var(--ink); font-weight:600}
+  .card .maprow{margin-top:auto; padding-top:16px; display:flex; flex-wrap:wrap; gap:8px}
+  .maplink{display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700;
+           color:var(--rust); text-decoration:none; border:1px solid var(--line);
+           border-radius:9px; padding:7px 11px; background:#fff}
+  .maplink:hover{background:#fff3e2; border-color:#e7c79a}
+  .maplink.primary{background:var(--rust); color:#fff; border-color:var(--rust)}
+  .maplink.primary:hover{background:var(--deep)}
+  .maplink svg{width:14px; height:14px; flex:none}
+
+  /* SEASON CHART */
+  .chart{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px}
+  .tl{display:grid; grid-template-columns:210px 1fr; gap:9px 14px; align-items:center}
+  @media(max-width:680px){.tl{grid-template-columns:130px 1fr}}
+  .tl .lbl{font-size:13.5px}
+  .tl .lbl small{display:block; color:var(--muted); font-size:12px}
+  .track{position:relative;height:16px;border-radius:8px;background:#f0ebe3}
+  .bar{position:absolute; top:0; bottom:0; border-radius:8px;
+       background:linear-gradient(90deg,#e3e1db,#6b4a36); box-shadow:0 1px 3px rgba(0,0,0,.12);z-index:1}
+  .axis{display:grid; grid-template-columns:210px 1fr; gap:14px; margin-top:12px}
+  @media(max-width:680px){.axis{grid-template-columns:130px 1fr} .axis .ticks{font-size:10.5px}}
+  .axis .ticks{position:relative; display:flex; justify-content:space-between; font-size:12px; color:var(--muted)}
+  .legend{margin-top:14px; font-size:12.5px; color:var(--muted)}
+  .legend b{color:var(--rust)}
+
+  /* HOVER DATE READOUT */
+  .track{cursor:crosshair}
+  .dateTip{position:fixed; z-index:9999; transform:translate(-50%,-100%); background:#26221d; color:#fff;
+           font:600 12px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+           padding:5px 9px; border-radius:6px; white-space:nowrap; pointer-events:none; opacity:0; transition:opacity .08s}
+  .dateTip.show{opacity:1}
+  .dateTip.below{transform:translate(-50%,0)}
+  .dateLine{position:absolute; top:-4px; bottom:-4px; width:2px; margin-left:-1px; background:rgba(38,34,29,.5);
+            border-radius:2px; pointer-events:none; opacity:0; z-index:5}
+  .dateLine.show{opacity:1}
+  .peakLine{position:absolute; top:-4px; bottom:-4px; width:3px; margin-left:-1.5px; background:#ff2020;
+            border-radius:2px; pointer-events:none; z-index:4;
+            box-shadow:0 0 5px 1px rgba(255,40,40,.9),0 0 11px 3px rgba(255,40,40,.5)}
+  .band{position:absolute; top:-6px; bottom:-6px; border-radius:5px; background:transparent;
+        border:2px solid #8a4a12; z-index:3; pointer-events:none; min-width:6px;
+        box-shadow:0 0 0 1px rgba(255,255,255,.7),0 2px 6px rgba(80,50,10,.22)}
+
+  /* BASICS */
+  .log{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px}
+  .log .item{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px}
+  .log h3{margin:0 0 8px; font-size:15px}
+  .log ul{margin:0; padding-left:18px; color:var(--muted); font-size:14px}
+  .log li{margin:4px 0}
+  .callout{background:#fff6e6; border:1px solid #f0d9ac; border-left:5px solid var(--gold);
+           border-radius:12px; padding:16px 18px; color:#5c4a1e; font-size:14.5px}
+  .callout b{color:#3f3210}
+
+  footer{border-top:1px solid var(--line); padding:26px 0 46px; color:var(--muted); font-size:13px}
+  footer a, a{color:var(--rust)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Fall Color After Tahoe</h1>
+    <p class="sub">Two days, <b>Nov 14–15, 2026</b>. Day one at Lake Tahoe, day two chasing what's left of the season on the drive home. The honest answer: mid-November is <b>late</b> — but the vineyards, Apple Hill and the low river valleys are still going.</p>
+    <div class="meta">
+      <span class="pill">🍁 Sat–Sun · Nov 14–15</span>
+      <span class="pill">🏔️ Day 1 · Lake Tahoe</span>
+      <span class="pill">🚗 Day 2 · the drive home</span>
+      <span class="pill">🍇 Vineyards &amp; Apple Hill</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- VERDICT -->
+<section class="wrap">
+  <h2>Mid-November is late — here's what's left</h2>
+  <p class="lede">Color moves downhill at roughly a day per 100&nbsp;m (330&nbsp;ft). By Nov 14–15 the high country is bare and most foothill forest is past peak, but the lowest, latest ground is still turning. Reports from recent seasons tell the story.</p>
+  <div class="verdict">
+    <div class="vbox">
+      <h3><span class="dot no"></span>Tahoe &amp; the foothill forest — done</h3>
+      <p>Lake Tahoe's aspens are <b>bare by now</b> (they peak mid-October). The native forest of the El Dorado and Tahoe national forests — the black oaks and maples along Hwy 50 — peaked <b>Oct 18–Nov 5</b> and is largely stripped.</p>
+      <p>Still, the lake itself is the reason you're there. Treat Day 1 as scenery, not foliage.</p>
+    </div>
+    <div class="vbox">
+      <h3><span class="dot yes"></span>Vineyards, Apple Hill &amp; the low valleys — still going</h3>
+      <p>The <b>grapevines</b> are the late show: after harvest they blaze crimson, rust and gold into mid-to-late November across the El Dorado and Amador foothills. <b>Apple Hill</b> orchards are documented at full peak as late as <b>Nov 18</b>, and its own growers call early-to-mid November the "best-kept secret."</p>
+      <p>Low and last: <b>valley oak, cottonwood and sycamore</b> along the American and Mokelumne rivers, and <b>Filoli</b>'s ginkgos near the Bay.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ROUTES -->
+<section class="wrap" style="padding-top:8px">
+  <h2>Choose your drive home</h2>
+  <p class="lede">Three ways back from Tahoe to the Bay Area, each with its own palette. The full candidate list — with photos and peak bars — is on the <a href="day2-return.html">Day 2 page</a>.</p>
+  <div class="grid">
+
+    <div class="card">
+      <div class="ph" style="background-image:url('images/applehill_larsen.jpg')"></div>
+      <div class="bd">
+        <h3>Corridor A · US-50 — El Dorado &amp; Apple Hill</h3>
+        <div class="loc">South Lake Tahoe → Placerville → Camino → Sacramento → Bay Area</div>
+        <p class="note">The default route home and the best-stocked one: Apple Hill's orchards, El Dorado wine country, the South Fork American River, Placerville's pistache and Coloma.</p>
+        <p class="facts">🚗 ~3.5–4 h Tahoe→Bay · 🍎 Peak window: mid-Nov</p>
+        <div class="maprow">
+          <a class="maplink primary" href="day2-return.html">📋 All candidates</a>
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=South%20Lake%20Tahoe%2C%20CA&destination=Redwood%20City%2C%20CA&waypoints=Placerville%2C%20CA%7CCamino%2C%20CA%7CColoma%2C%20CA">🗺️ Directions</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ph" style="background-image:url('images/vineyard_zinfandel.jpg')"></div>
+      <div class="bd">
+        <h3>Corridor B · CA-88 / CA-49 — Amador wine country</h3>
+        <div class="loc">South Lake Tahoe → Kirkwood → Jackson → Plymouth → Stockton → Bay Area</div>
+        <p class="note">The wine detour: Shenandoah Valley's old-vine Zinfandel vineyards, plus the Gold Rush towns of Sutter Creek, Jackson and Volcano.</p>
+        <p class="facts">🚗 ~4–4.5 h · 🍇 Peak window: early-to-mid Nov</p>
+        <div class="maprow">
+          <a class="maplink primary" href="day2-return.html#corridor-b">📋 All candidates</a>
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=South%20Lake%20Tahoe%2C%20CA&destination=Redwood%20City%2C%20CA&waypoints=Kirkwood%2C%20CA%7CPlymouth%2C%20CA%7CSutter%20Creek%2C%20CA">🗺️ Directions</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ph" style="background-image:url('images/nevadacity_1.jpg')"></div>
+      <div class="bd">
+        <h3>Corridor C · I-80 — Nevada City &amp; Placer</h3>
+        <div class="loc">Truckee → Nevada City → Grass Valley → Auburn → Sacramento → Bay Area</div>
+        <p class="note">The north-shore route: Nevada City and Grass Valley's Victorian streets and planted maples, then the Placer County wine trail through Auburn and Newcastle.</p>
+        <p class="facts">🚗 ~3.5–4 h · 🍁 Peak window: early Nov</p>
+        <div class="maprow">
+          <a class="maplink primary" href="day2-return.html#corridor-c">📋 All candidates</a>
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Truckee%2C%20CA&destination=Redwood%20City%2C%20CA&waypoints=Nevada%20City%2C%20CA%7CAuburn%2C%20CA">🗺️ Directions</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SEASON CHART -->
+<section class="wrap">
+  <h2>Season at a glance</h2>
+  <p class="lede">Every candidate on one clock. Each bar is shaded by how far along that place is — green early, <b>red at peak</b>, brown after. The outlined box is your weekend, <b>Nov 14–15</b>. Hover any bar for the date.</p>
+  <div class="chart" data-start="2026-10-18" data-end="2026-11-27">
+    <div class="tl">
+      <div class="lbl">Lake Tahoe · aspens <small>Day 1 · scenery</small></div>
+      <div class="track"><span class="bar" data-from="2026-10-15" data-to="2026-10-21"></span></div>
+
+      <div class="lbl">South Fork American River <small>El Dorado NF · ~2,000 ft</small></div>
+      <div class="track"><span class="bar" data-from="2026-10-28" data-to="2026-11-01"></span></div>
+
+      <div class="lbl">Placerville <small>1,860 ft · Chinese pistache</small></div>
+      <div class="track"><span class="bar" data-from="2026-10-28" data-to="2026-11-01"></span></div>
+
+      <div class="lbl">Coloma · Marshall Gold <small>760 ft · river valley</small></div>
+      <div class="track"><span class="bar" data-from="2026-11-02" data-to="2026-11-09"></span></div>
+
+      <div class="lbl">Nevada City · Grass Valley <small>2,500 ft · town trees</small></div>
+      <div class="track"><span class="bar" data-from="2026-11-06" data-to="2026-11-11"></span></div>
+
+      <div class="lbl">El Dorado wine country <small>~2,200 ft · vineyards</small></div>
+      <div class="track"><span class="bar" data-from="2026-11-05" data-to="2026-11-12"></span></div>
+
+      <div class="lbl">Placer wine trail <small>~1,200 ft · vineyards</small></div>
+      <div class="track"><span class="bar" data-from="2026-11-05" data-to="2026-11-12"></span></div>
+
+      <div class="lbl">Sutter Creek · Jackson <small>~1,500 ft · town trees</small></div>
+      <div class="track"><span class="bar" data-from="2026-11-05" data-to="2026-11-12"></span></div>
+
+      <div class="lbl">Amador Shenandoah Valley <small>~1,600 ft · vineyards</small></div>
+      <div class="track"><span class="bar" data-from="2026-11-07" data-to="2026-11-14"></span></div>
+
+      <div class="lbl">Apple Hill · Camino <small>3,133 ft · orchards</small></div>
+      <div class="track"><span class="bar" data-from="2026-11-10" data-to="2026-11-18"></span></div>
+
+      <div class="lbl">Folsom Lake · American River <small>~400 ft · valley oak</small></div>
+      <div class="track"><span class="bar" data-from="2026-11-12" data-to="2026-11-18"></span></div>
+
+      <div class="lbl">Filoli · Woodside <small>~500 ft · ginkgo</small></div>
+      <div class="track"><span class="bar" data-from="2026-11-10" data-to="2026-11-20"></span></div>
+    </div>
+    <div class="axis">
+      <div></div>
+      <div class="ticks"><span>Oct 18</span><span>Oct 28</span><span>Nov 6</span><span>Nov 16</span><span>Nov 27</span></div>
+    </div>
+    <div class="legend"><b>Red line</b> = estimated peak · <b>box</b> = Nov 14–15, your dates. Peak dates are estimates for planning — confirm with the live report before you drive.</div>
+  </div>
+</section>
+
+<!-- BASICS -->
+<section class="wrap">
+  <h2>Trip basics</h2>
+  <p class="lede">A quick weekend, so keep it simple: one big stop per half-day, and let the drive itself be the show.</p>
+  <div class="log">
+    <div class="item">
+      <h3>Timing</h3>
+      <ul>
+        <li><b>Day 1 (Sat Nov 14)</b> — Lake Tahoe: Emerald Bay, the South Shore, a lakeside walk</li>
+        <li><b>Day 2 (Sun Nov 15)</b> — leave Tahoe after breakfast; two or three stops on the way down</li>
+        <li>Short days: sunset ~4:50&nbsp;pm — front-load the scenic stops</li>
+      </ul>
+    </div>
+    <div class="item">
+      <h3>What's actually turning</h3>
+      <ul>
+        <li><b>Grapevines</b> — crimson, rust, gold (the reliable late show)</li>
+        <li><b>Orchards</b> — Apple Hill apples, persimmon, maple</li>
+        <li><b>Low river trees</b> — valley oak, cottonwood, sycamore</li>
+        <li><b>Planted town trees</b> — pistache, liquidambar, ginkgo</li>
+      </ul>
+    </div>
+    <div class="item">
+      <h3>Before you leave</h3>
+      <ul>
+        <li>Check the Caltrans QuickMap for Hwy 50 / I-80 / CA-88 conditions</li>
+        <li>A storm can strip the remaining leaves in a day — check the latest report</li>
+        <li>Tahoe passes can see early snow; carry chains</li>
+        <li>Confirm tasting-room hours; many are weekends-only in November</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:18px">
+    <b>Weather fallback:</b> if a storm snows in the passes or strips the foothills, drop lower and later — the Sacramento Valley's valley oaks and cottonwoods, and Filoli near the Bay, hold into late November.
+  </div>
+</section>
+
+<footer class="wrap">
+  <p><b>Sources.</b> Peak-date model and elevation bands from <a href="https://morethanjustparks.com/foliage-tracker/california" target="_blank" rel="noopener">More Than Just Parks' California foliage tracker</a> (forecast issued Nov 1, 2026); ground reports from <a href="https://californiafallcolor.com/" target="_blank" rel="noopener">California Fall Color</a> (2023–2025 seasons); grower guidance from <a href="https://applehill.com/november-best-time-to-visit/" target="_blank" rel="noopener">Apple Hill Growers</a> and <a href="https://visit-eldorado.com/where-to-find-fall-colors-around-el-dorado-county/" target="_blank" rel="noopener">Visit El Dorado</a>. Peak dates are estimates for planning — always confirm the live report before departing.</p>
+  <p>Generated Nov 1, 2026 · <a href="day2-return.html">Day 2 candidate list →</a> · <a href="day1-tahoe.html">Day 1 at Tahoe →</a></p>
+</footer>
+
+</main>
+<script>
+(function(){
+  var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  function ms(s){var p=s.split("-").map(Number);return Date.UTC(p[0],p[1]-1,p[2]);}
+  var DAY=86400000;
+  var RAMP=[[-24,"#e3e1db"],[-21,"#a4bf85"],[-18,"#c7c596"],[-15,"#d1bf80"],[-12,"#cdb151"],[-9,"#cf9c21"],[-6,"#e08018"],[-3,"#e25d1a"],[0,"#d42a1e"],[3,"#b82828"],[6,"#963027"],[9,"#823a2a"],[12,"#77452f"],[15,"#734732"],[18,"#6e4934"],[21,"#6b4a36"],[24,"#6b4a36"]];
+  function season(peak,s,span){
+    var stops=RAMP.map(function(st){
+      var f=Math.max(0,Math.min(1,(peak+st[0]*DAY-s)/span));
+      return st[1]+" "+(f*100).toFixed(2)+"%";
+    });
+    return "linear-gradient(90deg,"+stops.join(",")+")";
+  }
+  var tip=document.createElement("div"); tip.className="dateTip"; document.body.appendChild(tip);
+  var BAND_START=ms("2026-11-14"), BAND_END=ms("2026-11-16");
+  document.querySelectorAll("[data-start][data-end]").forEach(function(scope){
+    var s=ms(scope.dataset.start), e=ms(scope.dataset.end), span=e-s;
+    scope.querySelectorAll(".bar").forEach(function(bar){
+      if(!bar.dataset.from||!bar.dataset.to){return;}
+      var peak=(ms(bar.dataset.from)+ms(bar.dataset.to))/2;
+      bar.style.left="0%"; bar.style.width="100%";
+      bar.style.background=season(peak,s,span);
+      var pl=document.createElement("div"); pl.className="peakLine";
+      pl.style.left=(Math.max(0,Math.min(1,(peak-s)/span))*100)+"%";
+      bar.parentElement.appendChild(pl);
+    });
+    scope.querySelectorAll(".track").forEach(function(track){
+      var bd=document.createElement("div"); bd.className="band";
+      bd.style.left=(Math.max(0,Math.min(1,(BAND_START-s)/span))*100)+"%";
+      bd.style.width=(Math.max(0,Math.min(1,(BAND_END-BAND_START)/span))*100)+"%";
+      track.appendChild(bd);
+      var line=document.createElement("div"); line.className="dateLine"; track.appendChild(line);
+      track.addEventListener("mousemove",function(ev){
+        var r=track.getBoundingClientRect();
+        var f=Math.max(0,Math.min(1,(ev.clientX-r.left)/r.width));
+        var d=new Date(s+f*(e-s));
+        tip.textContent=M[d.getUTCMonth()]+" "+d.getUTCDate()+", "+d.getUTCFullYear();
+        tip.style.left=ev.clientX+"px";
+        var above=r.top-10;
+        if(above<46){tip.style.top=(r.bottom+10)+"px";tip.classList.add("below");}
+        else{tip.style.top=above+"px";tip.classList.remove("below");}
+        tip.classList.add("show");
+        line.style.left=(f*100)+"%"; line.classList.add("show");
+      });
+      track.addEventListener("mouseleave",function(){tip.classList.remove("show");line.classList.remove("show");});
+    });
+  });
+})();
+</script>
+</body>
+</html>

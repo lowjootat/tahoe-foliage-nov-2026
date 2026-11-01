@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 1 · Lake Tahoe · Nov 14, 2026</title>
+<style>
+  :root{
+    --bg:#faf7f2; --ink:#26221d; --muted:#6b6259;
+    --line:#e7ded1; --card:#fffdfa;
+    --rust:#b5651d; --gold:#e2a53a; --green:#4a6b3a; --deep:#7c3f10;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .backbar{background:#2b2b2b; color:#fff}
+  .backbar a{color:#fff; text-decoration:none; font-size:14px; font-weight:600}
+  .backbar .wrap{padding:10px 20px; display:flex; justify-content:space-between; gap:12px}
+  header.hero{position:relative; color:#fff; padding:56px 0 48px;
+    background:linear-gradient(180deg, rgba(20,14,8,.45), rgba(20,14,8,.8)),
+      url("images/tahoe_emeraldbay.jpg") center 55%/cover no-repeat;}
+  header.hero h1{margin:0 0 8px; font-size:clamp(26px,4vw,44px); line-height:1.1; letter-spacing:-.5px}
+  header.hero .sub{font-size:clamp(15px,2vw,19px); opacity:.94; max-width:760px}
+  header.hero .meta{margin-top:18px; display:flex; flex-wrap:wrap; gap:8px}
+  .pill{background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.28);
+        padding:5px 12px; border-radius:999px; font-size:13px; backdrop-filter:blur(4px)}
+  section{padding:40px 0}
+  h2{font-size:22px; margin:0 0 4px; letter-spacing:-.3px}
+  .lede{color:var(--muted); margin:0 0 22px; max-width:820px}
+  .days{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px}
+  .day{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 18px 20px; position:relative; overflow:hidden}
+  .day::before{content:""; position:absolute; inset:0 auto 0 0; width:5px; background:linear-gradient(var(--gold),var(--rust))}
+  .day .d{font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--rust)}
+  .day h3{margin:4px 0 10px; font-size:17px}
+  .day ol{margin:0; padding-left:18px; color:var(--muted); font-size:14.5px}
+  .day li{margin:4px 0}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:18px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px; overflow:hidden;
+        display:flex; flex-direction:column}
+  .card .ph{height:180px; background:#ddd center/cover no-repeat}
+  .card .bd{padding:14px 16px 16px; display:flex; flex-direction:column; flex:1}
+  .card h3{margin:0 0 2px; font-size:16px}
+  .card .loc{color:var(--muted); font-size:13px; margin-bottom:8px}
+  .card .note{margin:8px 0 0; font-size:13.5px; color:var(--muted)}
+  .pbar{margin-top:9px}
+  .pbar .ptrack{position:relative;height:10px;border-radius:6px;background:#f0ebe3}
+  .pbar .pfill{position:absolute;top:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,#e3e1db,#6b4a36);box-shadow:0 1px 2px rgba(0,0,0,.12);z-index:1}
+  .pbar .pcap{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-top:3px}
+  .peakLine{position:absolute; top:-3px; bottom:-3px; width:3px; margin-left:-1.5px; background:#ff2020;
+            border-radius:2px; pointer-events:none; z-index:4; box-shadow:0 0 5px 1px rgba(255,40,40,.9),0 0 11px 3px rgba(255,40,40,.5)}
+  .band{position:absolute; top:-4px; bottom:-4px; border-radius:4px; background:transparent;
+        border:2px solid #8a4a12; z-index:3; pointer-events:none; min-width:6px; box-shadow:0 0 0 1px rgba(255,255,255,.7)}
+  .callout{background:#fff6e6; border:1px solid #f0d9ac; border-left:5px solid var(--gold);
+           border-radius:12px; padding:16px 18px; color:#5c4a1e; font-size:14.5px}
+  .callout b{color:#3f3210}
+  footer{border-top:1px solid var(--line); padding:26px 0 46px; color:var(--muted); font-size:13px}
+  footer a, a{color:var(--rust)}
+</style>
+</head>
+<body>
+
+<div class="backbar"><div class="wrap"><a href="index.html">← Trip overview</a><a href="day2-return.html">Day 2 · the drive home →</a></div></div>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Day 1 · Lake Tahoe</h1>
+    <p class="sub">Saturday <b>Nov 14, 2026</b>. Be honest with yourself: Tahoe's fall color is <b>over</b> by mid-November — the aspens went bare in October. This is a <b>scenery</b> day: the lake, the granite, the quiet. Save the foliage for the drive home.</p>
+    <div class="meta">
+      <span class="pill">🏔️ Lake Tahoe · 6,225 ft</span>
+      <span class="pill">🍂 Aspens: past peak / bare</span>
+      <span class="pill">🧥 Cold — layers + chains</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap" style="padding-bottom:0">
+  <div class="callout">
+    <b>Foliage reality check.</b> Tahoe's aspens peak in <b>mid-October</b> and are gone by November. On a recent Nov 6 drive up Hwy 50, the trees past Kyburz were "almost all bare." Go to Tahoe for the lake — then let Day 2 carry the color.
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>A lake day, hour by hour</h2>
+  <p class="lede">Short daylight (sunset ~4:50&nbsp;pm), so start early and keep the loop tight.</p>
+  <div class="days">
+    <div class="day">
+      <div class="d">Morning</div>
+      <h3>Emerald Bay &amp; the west shore</h3>
+      <ol>
+        <li>Emerald Bay overlook (Fannette Island, the tea house)</li>
+        <li>Vikingsholm / DL Bliss for a shoreline walk</li>
+        <li>Coffee in South Lake Tahoe</li>
+      </ol>
+    </div>
+    <div class="day">
+      <div class="d">Midday</div>
+      <h3>South Shore</h3>
+      <ol>
+        <li>Camp Richardson &amp; Pope Beach</li>
+        <li>Tallac Historic Site — lakeside trail</li>
+        <li>Lunch in South Lake Tahoe or Stateline</li>
+      </ol>
+    </div>
+    <div class="day">
+      <div class="d">Afternoon</div>
+      <h3>Golden hour</h3>
+      <ol>
+        <li>Heavenly gondola or Van Sickle for the big view</li>
+        <li>Nevada Beach / Zephyr Cove for sunset over the water</li>
+        <li>Early dinner; get an early start Sunday</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>What's left at Tahoe</h2>
+  <p class="lede">One card, one bar — and the bar shows why Tahoe isn't your foliage stop.</p>
+  <div class="grid" data-start="2026-10-01" data-end="2026-11-27">
+    <div class="card">
+      <div class="ph" style="background-image:url('images/tahoe_emeraldbay.jpg')"></div>
+      <div class="bd">
+        <h3>Lake Tahoe &amp; Emerald Bay</h3>
+        <div class="loc">South Shore · <span style="font-weight:700">6,225 ft</span></div>
+        <div class="pbar"><div class="ptrack"><span class="pfill" data-from="2026-10-15" data-to="2026-10-21"></span></div><div class="pcap"><span>Oct 1</span><span>Nov 27</span></div></div>
+        <p class="note">Aspens peak mid-October and are bare by your visit. Emerald Bay, the west shore and the South Shore trails are the day — the color is gone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p><b>Sources.</b> Aspen timing from <a href="https://californiafallcolor.com/2025/11/04/50-miles-of-color-along-hwy-50-go-now/" target="_blank" rel="noopener">California Fall Color</a> (Nov 2025 Hwy 50 report) and <a href="https://visit-eldorado.com/where-to-find-fall-colors-around-el-dorado-county/" target="_blank" rel="noopener">Visit El Dorado</a>. Photo: Wikimedia Commons.</p>
+  <p>Generated Nov 1, 2026 · <a href="index.html">← Trip overview</a> · <a href="day2-return.html">Day 2 · the drive home →</a></p>
+</footer>
+
+</main>
+<script>
+(function(){
+  function ms(s){var p=s.split("-").map(Number);return Date.UTC(p[0],p[1]-1,p[2]);}
+  var DAY=86400000;
+  var RAMP=[[-24,"#e3e1db"],[-21,"#a4bf85"],[-18,"#c7c596"],[-15,"#d1bf80"],[-12,"#cdb151"],[-9,"#cf9c21"],[-6,"#e08018"],[-3,"#e25d1a"],[0,"#d42a1e"],[3,"#b82828"],[6,"#963027"],[9,"#823a2a"],[12,"#77452f"],[15,"#734732"],[18,"#6e4934"],[21,"#6b4a36"],[24,"#6b4a36"]];
+  function season(peak,s,span){
+    var stops=RAMP.map(function(st){var f=Math.max(0,Math.min(1,(peak+st[0]*DAY-s)/span));return st[1]+" "+(f*100).toFixed(2)+"%";});
+    return "linear-gradient(90deg,"+stops.join(",")+")";
+  }
+  var BAND_START=ms("2026-11-14"), BAND_END=ms("2026-11-16");
+  document.querySelectorAll("[data-start][data-end]").forEach(function(scope){
+    var s=ms(scope.dataset.start), e=ms(scope.dataset.end), span=e-s;
+    scope.querySelectorAll(".pfill").forEach(function(bar){
+      if(!bar.dataset.from||!bar.dataset.to){return;}
+      var peak=(ms(bar.dataset.from)+ms(bar.dataset.to))/2;
+      bar.style.left="0%"; bar.style.width="100%"; bar.style.background=season(peak,s,span);
+      var pl=document.createElement("div"); pl.className="peakLine";
+      pl.style.left=(Math.max(0,Math.min(1,(peak-s)/span))*100)+"%";
+      bar.parentElement.appendChild(pl);
+    });
+    scope.querySelectorAll(".ptrack").forEach(function(track){
+      var bd=document.createElement("div"); bd.className="band";
+      bd.style.left=(Math.max(0,Math.min(1,(BAND_START-s)/span))*100)+"%";
+      bd.style.width=(Math.max(0,Math.min(1,(BAND_END-BAND_START)/span))*100)+"%";
+      track.appendChild(bd);
+    });
+  });
+})();
+</script>
+</body>
+</html>
