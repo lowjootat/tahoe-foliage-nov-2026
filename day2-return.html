@@ -58,7 +58,7 @@
   .vc-no{background:#f2eae4; color:#8a6a58; border:1px solid #dcc9ba}
   .card .maprow{margin-top:auto; padding-top:14px; display:flex; flex-wrap:wrap; gap:8px}
   .cardmap{margin-top:14px; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:#fff}
-  .cardmap iframe{width:100%; height:150px; border:0; display:block}
+  .cardmap iframe{width:100%; height:170px; border:0; display:block}
   .maplink{display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700;
            color:var(--rust); text-decoration:none; border:1px solid var(--line);
            border-radius:9px; padding:7px 11px; background:#fff}
@@ -88,6 +88,19 @@
   details.src ul{margin:8px 0 0;padding-left:16px}
   details.src li{margin:4px 0}
   details.src a{color:var(--rust)}
+
+  /* VINEYARD SUBLIST */
+  .vineyards{margin-top:12px; padding-top:12px; border-top:1px dashed var(--line)}
+  .vineyards .vh{font-size:11px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--rust); margin-bottom:8px}
+  .vineyards ul{margin:0; padding-left:0; list-style:none; font-size:12.5px; color:var(--muted)}
+  .vineyards li{margin:0 0 9px; line-height:1.42}
+  .vineyards li b{color:var(--ink); font-size:13px}
+  .vineyards .vmeta{color:var(--muted); font-size:11.5px; margin-left:4px}
+  .vineyards a{color:var(--rust); font-weight:700; white-space:nowrap}
+  .vtag{display:inline-block; font-size:9.5px; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+        padding:2px 6px; border-radius:999px; margin-left:6px; vertical-align:1px}
+  .vtag.go{background:#e4f0dc; color:#2f5a1e; border:1px solid #b9d7a6}
+  .vtag.ok{background:#fdf0d8; color:#8a5a12; border:1px solid #eccb8c}
 
   /* CAROUSEL */
   .carousel{position:relative;height:180px;background:#ddd;overflow:hidden}
@@ -194,14 +207,23 @@
         <div class="loc">Fair Play · Camino · Pleasant Valley · <span class="elev">~2,000–2,800 ft</span></div>
         <div class="pbar"><div class="ptrack"><span class="pfill" data-from="2026-11-05" data-to="2026-11-12"></span></div><div class="pcap"><span>Oct 18</span><span>Nov 27</span></div></div>
         <p class="note">The vines are the late show. After harvest the leaves explode into crimson, rust and gold and hold into mid-November — the photo above was shot <b>Nov 20</b>. Pair a stop with a tasting and a picnic.</p>
+        <div class="vineyards">
+          <div class="vh">The three you asked about · checked for Nov 14–15</div>
+          <ul>
+            <li><b>Sierra Vista Vineyards</b><span class="vmeta">~2,400–2,800 ft · Pleasant Valley</span><span class="vtag go">Best documented</span><br>This is the winery in the Nov 20, 2022 photo above — color held a week <i>past</i> your dates. Also on the Nov 9, 2019 Pleasant Valley run. <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Sierra%20Vista%20Vineyards%204560%20Cabernet%20Way%20Placerville%20CA">Map</a></li>
+            <li><b>Starfield Vineyards</b><span class="vmeta">~2,200–2,800 ft · east of Placerville</span><span class="vtag ok">Likely still autumn</span><br>67-acre estate with lakes and trails; the vines were "still plenty of time… before the vines take their winter nap" on Nov 2, 2025. <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Starfield%20Vineyards%202750%20Jacquier%20Rd%20Placerville%20CA">Map</a></li>
+            <li><b>Lava Cap Winery</b><span class="vmeta">2,400–2,700 ft · Fruitridge Rd</span><span class="vtag ok">Riskiest of the three</span><br>The highest of the three, so it turns <i>first</i>. Color noted Nov 3, 2023 — 11 days before you arrive. <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Lava%20Cap%20Winery%202221%20Fruitridge%20Rd%20Placerville%20CA">Map</a></li>
+          </ul>
+          <p class="note" style="margin-top:2px">All three sit in the 2,000–4,000 ft band that MTJP peaks at <b>Nov 5</b>, so the native oaks and maples are past peak — the <b>vines</b> are the reason to come, and they run behind the canopy.</p>
+        </div>
         <details class="src"><summary>Peak dates &amp; sources</summary><ul>
           <li>Photo: Sierra Vista Winery, Pleasant Valley (El Dorado County), <b>Nov 20, 2022</b> — an actual vineyard in the region, late in the season. <a href="https://californiafallcolor.com/2022/11/20/sunday-drive/" target="_blank" rel="noopener">California Fall Color</a>.</li>
           <li>El Dorado Wines: "the grapevines themselves are autumn's unsung heroes… the leaves explode into vibrant hues of crimson, rust, and gold" — the foothill AVA shines <b>late October through November</b>. <a href="https://eldoradowines.org/your-guide-to-fall-colors-in-el-dorado-wine-country/" target="_blank" rel="noopener">El Dorado Wines</a>.</li>
           <li><b>How the Nov 5–12 window was inferred.</b> MTJP has no vineyard layer, so this is built from elevation. The county figure (El Dorado, peak <b>Oct 18–20</b>) is a canopy-weighted median that runs <i>high</i>, and the AVA sits lower at ~2,000–2,800 ft. In that band MTJP's own El Dorado NF page puts peak at <b>Nov 5</b> (its 2,000–4,000 ft band). Vines color <i>after</i> the native canopy — post-harvest — and are documented into mid/late November (the Nov 20, 2022 photo above; grower guidance "late October through November"). So the peak is placed just past the Nov 5 band, at <b>Nov 5–12</b>, and it's set <b>early on purpose</b>: the photo evidence says color persists later, so your Nov 14–15 dates are still in play rather than past peak.</li>
         </ul></details>
-        <div class="cardmap"><iframe title="Map of Fair Play, El Dorado County" src="https://www.google.com/maps?q=Fair%20Play%2C%20CA&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+        <div class="cardmap"><iframe title="Map of Lava Cap, Starfield and Sierra Vista vineyards" src="https://maps.google.com/maps?saddr=Lava+Cap+Winery,+Placerville,+CA&amp;daddr=Starfield+Vineyards,+Placerville,+CA+to:Sierra+Vista+Vineyards,+Placerville,+CA&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
         <div class="maprow">
-          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Fair%20Play%2C%20El%20Dorado%20County"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Open in Google Maps</a>
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&amp;origin=Lava%20Cap%20Winery%2C%202221%20Fruitridge%20Rd%2C%20Placerville%2C%20CA&amp;destination=Sierra%20Vista%20Vineyards%2C%204560%20Cabernet%20Way%2C%20Placerville%2C%20CA&amp;waypoints=Starfield%20Vineyards%2C%202750%20Jacquier%20Rd%2C%20Placerville%2C%20CA"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Open all three in Google Maps</a>
         </div>
       </div>
     </div>
