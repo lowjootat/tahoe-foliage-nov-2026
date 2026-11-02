@@ -45,6 +45,13 @@
   .card h3{margin:0 0 2px; font-size:16px}
   .card .loc{color:var(--muted); font-size:13px; margin-bottom:8px}
   .card .note{margin:8px 0 0; font-size:13.5px; color:var(--muted)}
+  .cardmap{margin-top:12px; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:#fff}
+  .cardmap iframe{width:100%; height:150px; border:0; display:block}
+  .maprow{margin-top:12px; display:flex; flex-wrap:wrap; gap:8px}
+  .maplink{display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700;
+           color:var(--rust); text-decoration:none; border:1px solid var(--line);
+           border-radius:9px; padding:7px 11px; background:#fff}
+  .maplink:hover{background:#fff3e2; border-color:#e7c79a}
   .pbar{margin-top:9px}
   .pbar .ptrack{position:relative;height:10px;border-radius:6px;background:#f0ebe3}
   .pbar .pfill{position:absolute;top:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,#e3e1db,#6b4a36);box-shadow:0 1px 2px rgba(0,0,0,.12);z-index:1}
@@ -129,6 +136,10 @@
         <div class="loc">South Shore · <span style="font-weight:700">6,225 ft</span></div>
         <div class="pbar"><div class="ptrack"><span class="pfill" data-from="2026-10-15" data-to="2026-10-21"></span></div><div class="pcap"><span>Oct 1</span><span>Nov 27</span></div></div>
         <p class="note">Aspens peak mid-October and are bare by your visit. Emerald Bay, the west shore and the South Shore trails are the day — the color is gone.</p>
+        <div class="cardmap"><iframe title="Map of Emerald Bay, Lake Tahoe" src="https://www.google.com/maps?q=Emerald%20Bay%20State%20Park%2C%20CA&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+        <div class="maprow">
+          <a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Emerald%20Bay%20State%20Park%2C%20CA">🗺️ Open in Google Maps</a>
+        </div>
       </div>
     </div>
   </div>
